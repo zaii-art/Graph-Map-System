@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Map Algorithm System</title>
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          crossorigin=""/>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">GRAPH MAP <span>ALGORITHM SYSTEM</span></div>
+    <nav>
+        <button class="tab active" data-tab="search">Search Algorithm</button>
+        <button class="tab" data-tab="constraint">Constraints Search</button>
+        <button class="tab" data-tab="genetic">Genetic Algorithm</button>
+        <button class="tab" data-tab="neural">Neural Network</button>
+    </nav>
+</header>
+
+<section class="toolbar">
+    <div class="group">
+        <label class="switch-row">
+            <span>Draw Node</span>
+            <input type="checkbox" id="nodeMode">
+            <span class="switch"></span>
+        </label>
+
+        <label class="switch-row">
+            <span>Draw Edge</span>
+            <input type="checkbox" id="edgeMode">
+            <span class="switch"></span>
+        </label>
+    </div>
+
+    <form id="placeForm" class="group place-wrap" autocomplete="off">
+        <input id="placeInput" type="search" placeholder="Search country or place…" enterkeyhint="search" aria-label="Search country or place">
+        <button class="icon-btn" type="submit" title="Search place">🔍</button>
+        <ul id="placeResults"></ul>
+    </form>
+
+    <div class="group">
+        <button id="saveBtn" class="icon-btn" title="Save edited photo (PNG)">💾</button>
+        <button id="jsonBtn" class="icon-btn" title="Save graph data (JSON, to load later)">{ }</button>
+        <button id="loadBtn" class="icon-btn" title="Load graph">⬆</button>
+        <button id="deleteBtn" class="icon-btn" title="Delete selected vertex">🗑</button>
+        <button id="undoBtn" class="icon-btn" title="Undo last action">↶</button>
+        <button id="resetBtn" class="icon-btn" title="Reset">↻</button>
+        <label class="upload-btn" for="photoUpload" title="Upload your own map photo">🖼 Upload Map Photo</label>
+        <input type="file" id="photoUpload" accept="image/png,image/jpeg,image/webp" hidden>
+        <button id="onlineMapBtn" class="icon-btn" title="Return to online map">🌐</button>
+    </div>
+
+    <div class="group">
+        <label class="check-row">
+            <input type="checkbox" id="showMetrics" checked>
+            Metrics
+        </label>
+        <label class="check-row">
+            <input type="checkbox" id="showLabels" checked>
+            Labels
+        </label>
+    </div>
+
+    <div class="group algo">
+        <select id="algorithm">
+            <option value="bfs">Breadth First Search</option>
+            <option value="dfs">Depth First Search</option>
+            <option value="dijkstra">Dijkstra</option>
+            <option value="astar">A* Search</option>
+        </select>
+        <button id="searchBtn" class="search-btn">Search</button>
+    </div>
+</section>
+
+<main>
+    <div id="map"></div>
+
+    <aside class="panel">
+        <div id="panelHeader" class="panel-header" role="button" tabindex="0" title="Tap to minimize / expand">
+            <h3 id="panelTitle">Graph Information</h3>
+            <span id="panelChevron" class="chevron">▾</span>
+        </div>
+
+        <div id="panelBody">
+        <div id="tabDescription">
+            Add vertices and connect them with edges, then choose a start and goal node.
+        </div>
+
+        <hr>
+
+        <label>Start Node</label>
+        <select id="startNode">
+            <option value="">Select start</option>
+        </select>
+
+        <label>Goal Node</label>
+        <select id="goalNode">
+            <option value="">Select goal</option>
+        </select>
+
+        <div id="metrics" class="metrics">
+            <h4>Search Metrics</h4>
+            <div>Nodes: <b id="metricNodes">0</b></div>
+            <div>Edges: <b id="metricEdges">0</b></div>
+            <div>Visited: <b id="metricVisited">0</b></div>
+            <div>Path length: <b id="metricPath">0</b> hops</div>
+            <div>Total cost: <b id="metricCost">0</b></div>
+            <div>Time: <b id="metricTime">0 ms</b></div>
+        </div>
+
+        <hr>
+        <div id="constraintBox" class="xbox" hidden>
+            <label>Must pass through (optional)</label>
+            <select id="viaNode"><option value="">None</option></select>
+            <label>Max total cost (optional)</label>
+            <input id="maxCost" type="number" min="1" placeholder="e.g. 1500">
+            <p class="hint">Tap an edge to block / unblock it (red dashed = blocked). Then press Search.</p>
+        </div>
+        <div id="geneticBox" class="xbox" hidden>
+            <label>Stops to visit (Start → stops → Goal)</label>
+            <select id="gaStops" multiple size="4"></select>
+            <button id="gaRun" class="search-btn">Run Genetic Algorithm</button>
+        </div>
+        <div id="neuralBox" class="xbox" hidden><p class="hint">Not built yet.</p></div>
+        <div id="searchBox" class="xbox">
+            <button id="compareBtn" class="search-btn">Compare all algorithms</button>
+            <div id="compareOut"></div>
+            <p class="hint">Tap an edge to change its weight.</p>
+        </div>
+        <div id="result" class="result">
+            Draw Node mode: click anywhere on the map to create a vertex. Upload a photo to draw over your own map.
+        </div>
+
+        <div class="legend">
+            <div><span class="dot"></span> Vertex</div>
+            <div><span class="line"></span> Edge / Road</div>
+            <div><span class="path"></span> Search path</div>
+        </div>
+        </div>
+    </aside>
+</main>
+
+<footer>
+    CS 211 – DATA STRUCTURES AND ALGORITHMS • Interactive Graph Map
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin=""></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+<script src="{{ url_for('static', filename='extra.js') }}"></script>
+</body>
+</html>
