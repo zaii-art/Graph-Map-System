@@ -393,3 +393,36 @@ footer { flex: none; text-align: center; padding: 6px; font-size: 12px; color: #
 #compareOut table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
 #compareOut th, #compareOut td { border: 1px solid #ddd; padding: 3px 4px; text-align: center; }
 #compareOut tr.best td { background: #e8f5e9; font-weight: 600; }
+
+/* --- locate / coordinates feature --- */
+#map.locating, #map.locating .leaflet-interactive { cursor: crosshair; }
+.locate-icon { background: none; border: 0; }
+.locate-dot {
+    width: 18px; height: 18px; box-sizing: border-box;
+    border-radius: 50%;
+    background: #e53935; color: #fff;
+    border: 2px solid #fff;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .6);
+    font: bold 10px/14px Arial, sans-serif;
+    text-align: center;
+}
+#locateBox h4 { margin: 10px 0 6px; }
+.locate-row {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 4px; border-bottom: 1px solid var(--line);
+}
+.locate-num {
+    flex: 0 0 auto; min-width: 22px; height: 22px; border-radius: 50%;
+    background: #e53935; color: #fff; font-size: 12px; font-weight: 700;
+    line-height: 22px; text-align: center;
+}
+.locate-text { flex: 1 1 auto; min-width: 0; font-size: 18px; font-weight: 700; word-break: break-word; }
+.locate-row button {
+    flex: 0 0 auto; min-width: 40px; height: 40px; font-size: 16px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; cursor: pointer;
+}
+.locate-row button:active { background: var(--primary-soft); }
+.locate-actions { display: flex; gap: 6px; margin-top: 8px; }
+.locate-actions .search-btn { flex: 1 1 auto; }
+.locate-actions .locate-clear { background: #757575; flex: 0 0 auto; }
+.node-coords { font-size: 15px; font-weight: 700; margin: 4px 0 6px; }
