@@ -38,6 +38,12 @@
             <input type="checkbox" id="edgeMode">
             <span class="switch"></span>
         </label>
+
+        <label class="switch-row">
+            <span>📍 Locate</span>
+            <input type="checkbox" id="locateMode">
+            <span class="switch"></span>
+        </label>
     </div>
 
     <form id="placeForm" class="group place-wrap" autocomplete="off">
@@ -139,6 +145,15 @@
             Draw Node mode: click anywhere on the map to create a vertex. Upload a photo to draw over your own map.
         </div>
 
+        <div id="locateBox" class="xbox" hidden>
+            <h4>Located points</h4>
+            <div id="locateList"></div>
+            <div class="locate-actions">
+                <button type="button" id="locateCopyAll" class="search-btn">Copy all points</button>
+                <button type="button" id="locateClear" class="search-btn locate-clear">Clear</button>
+            </div>
+        </div>
+
         <div class="legend">
             <div><span class="dot"></span> Vertex</div>
             <div><span class="line"></span> Edge / Road</div>
@@ -156,5 +171,6 @@
         crossorigin=""></script>
 <script src="{{ url_for('static', filename='app.js') }}"></script>
 <script src="{{ url_for('static', filename='extra.js') }}"></script>
+<script src="{{ url_for('static', filename='locate.js') }}"></script>
 </body>
 </html>
