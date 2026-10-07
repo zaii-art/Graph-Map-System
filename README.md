@@ -46,3 +46,10 @@ Open `http://127.0.0.1:5000`.
 The photo is stored inside the exported JSON file as image data. Therefore, the JSON can be large, but loading it should restore the picture as well as vertices and edges. The uploaded image is processed in the browser and is not sent to the Flask server.
 
 The map tiles and Leaflet library require an internet connection.
+
+## Locate (coordinates)
+- Turn on the **📍 Locate** switch (next to Draw Node / Draw Edge), then tap the map, a road, or a vertex.
+- Each tap adds a small red numbered dot. The coordinates are shown in the **Located points** list in the Graph Information panel, with 📋 (copy), ✕ (remove), **Copy all points** and **Clear**.
+- On a photo the coordinates are pixels from the top-left corner (x, y). On the online map they are latitude, longitude.
+- Tapping a vertex (Locate off) also shows its coordinates in the vertex menu.
+- Code lives in `static/locate.js`; `app.js` and `extra.js` are unchanged.
